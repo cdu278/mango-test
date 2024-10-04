@@ -1,4 +1,4 @@
-package cdu278.mangotest.auth.token
+package cdu278.mangotest.auth.tokens
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -14,15 +14,15 @@ import java.io.OutputStream
 import javax.inject.Qualifier
 
 @OptIn(ExperimentalSerializationApi::class)
-val Context.authTokensDataStore: DataStore<AuthTokens?>
+val Context.authUserDataStore: DataStore<AuthUser?>
     by dataStore(
-        fileName = "auth-tokens.json",
-        serializer = object : Serializer<AuthTokens?> {
+        fileName = "auth-user.json",
+        serializer = object : Serializer<AuthUser?> {
 
-            override val defaultValue: AuthTokens?
+            override val defaultValue: AuthUser?
                 get() = null
 
-            override suspend fun readFrom(input: InputStream): AuthTokens? {
+            override suspend fun readFrom(input: InputStream): AuthUser? {
                 val bytes = withContext(Dispatchers.IO) {
                     input.use(InputStream::readBytes)
                 }
@@ -31,7 +31,7 @@ val Context.authTokensDataStore: DataStore<AuthTokens?>
                     ?.let(Json.Default::decodeFromString)
             }
 
-            override suspend fun writeTo(t: AuthTokens?, output: OutputStream) {
+            override suspend fun writeTo(t: AuthUser?, output: OutputStream) {
                 withContext(Dispatchers.IO) {
                     output.use { stream ->
                         t?.let { Json.encodeToStream(it, stream) }
@@ -43,4 +43,4 @@ val Context.authTokensDataStore: DataStore<AuthTokens?>
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class AuthTokensStore
+annotation class AuthUserStore

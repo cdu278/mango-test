@@ -3,8 +3,8 @@ package cdu278.mangotest.ui.main
 import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cdu278.mangotest.auth.token.AuthTokens
-import cdu278.mangotest.auth.token.AuthTokensStore
+import cdu278.mangotest.auth.tokens.AuthUser
+import cdu278.mangotest.auth.tokens.AuthUserStore
 import cdu278.mangotest.ui.uiSharingStarted
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -14,12 +14,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    @AuthTokensStore
-    private val tokensStore: DataStore<AuthTokens?>,
+    @AuthUserStore
+    private val authUserStore: DataStore<AuthUser?>,
 ) : ViewModel() {
 
     val authorizedFlow: Flow<Boolean> =
-        tokensStore.data
-            .map { it != null }
+        authUserStore.data
+            .map { it != null && it.exists }
             .stateIn(viewModelScope, uiSharingStarted, initialValue = true)
 }

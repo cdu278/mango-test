@@ -74,4 +74,15 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.androidx.datastore)
+
+    implementation(libs.countryCodePicker)
+
+    implementation(libs.ktor.core)
+    implementation(libs.ktor.cio)
+    implementation(libs.ktor.contentNegotiation)
+    implementation(libs.ktor.serializationJson)
+    implementation(libs.ktor.auth)
+    implementation(libs.ktor.logging)
+
+    implementation(libs.slf4j)
 }

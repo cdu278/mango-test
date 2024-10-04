@@ -11,7 +11,7 @@ interface Destinations {
         data object SignIn
 
         @Serializable
-        data object SignUp
+        class SignUp(val phoneNumber: String)
     }
 
     @Serializable

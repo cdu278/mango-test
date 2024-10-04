@@ -36,6 +36,14 @@ fun Root(
                     composable<Destinations.Auth.SignIn> {
                         SignInScreen(
                             viewModel = hiltViewModel(),
+                            goToMain = {
+                                navController.navigate(Destinations.Main) {
+                                    popUpTo(Destinations.Auth) { inclusive = true }
+                                }
+                            },
+                            goToSignUp = { phone ->
+                                navController.navigate(Destinations.Auth.SignUp(phone))
+                            },
                         )
                     }
                     composable<Destinations.Auth.SignUp> {

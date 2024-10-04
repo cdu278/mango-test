@@ -41,14 +41,20 @@ fun Root(
                                     popUpTo(Destinations.Auth) { inclusive = true }
                                 }
                             },
-                            goToSignUp = { phone ->
-                                navController.navigate(Destinations.Auth.SignUp(phone))
+                            goToSignUp = {
+                                navController.navigate(Destinations.Auth.SignUp)
                             },
                         )
                     }
                     composable<Destinations.Auth.SignUp> {
                         SignUpScreen(
                             viewModel = hiltViewModel(),
+                            goToMain = {
+                                navController.navigate(Destinations.Main) {
+                                    popUpTo(Destinations.Auth) { inclusive = true }
+                                }
+                            },
+                            goBack = navController::navigateUp,
                         )
                     }
                 }

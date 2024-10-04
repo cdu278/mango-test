@@ -104,7 +104,7 @@ class SignInViewModel @Inject constructor(
                             if (userExists) {
                                 SignInEvent.Authorized
                             } else {
-                                SignInEvent.SignUpNeeded(phone)
+                                SignInEvent.SignUpNeeded
                             }
                         )
                     },

@@ -12,4 +12,13 @@
     <string name="requestErrorDialog_unknown_text">Что-то пошло не так. Повторите поптыку позже</string>
     <string name="loading">Загрузка...</string>
     <string name="signIn_invalidCode">Введен неверный код из СМС</string>
+    <string name="signUp_title">Регистрация</string>
+    <string name="signUp_name">Ваше имя</string>
+    <string name="signUp_username">Ваше имя пользователя</string>
+    <string name="signUp_error_emptyName">Пожалуйста, введите имя</string>
+    <string name="signUp_error_emptyUsername">Пожалуйста, введите имя пользователя</string>
+    <string name="signUp_error_invalidUsername">Имя пользователя содержит недопустимые символы</string>
+    <string name="signUp_signUp">Зарегистрироваться</string>
+    <string name="signUp_name_placeholder">Иван Петров</string>
+    <string name="signUp_username_placeholder">A–Z a–z 0-9 -_</string>
 </resources>

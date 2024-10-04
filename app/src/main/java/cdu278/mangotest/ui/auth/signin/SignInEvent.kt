@@ -1,8 +1,7 @@
 package cdu278.mangotest.ui.auth.signin
 
-sealed interface SignInEvent {
+enum class SignInEvent {
 
-    data object Authorized : SignInEvent
-
-    class SignUpNeeded(val phone: String) : SignInEvent
+    Authorized,
+    SignUpNeeded,
 }

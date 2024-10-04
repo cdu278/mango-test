@@ -49,7 +49,13 @@ class SignInService @Inject constructor(
         }.map(
             transform = {
                 val response = it.body<CheckResponse>()
-                authUserStore.updateData { AuthUser(response.tokens, response.userExists) }
+                authUserStore.updateData {
+                    AuthUser(
+                        response.tokens,
+                        response.userExists,
+                        phone = phone.takeUnless { response.userExists },
+                    )
+                }
                 response.userExists
             },
             transformError = { error ->

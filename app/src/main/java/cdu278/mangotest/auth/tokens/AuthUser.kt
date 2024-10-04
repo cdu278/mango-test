@@ -4,10 +4,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AuthUser(
+data class AuthUser(
     val tokens: AuthTokens?,
     @SerialName("is_user_exists")
     val exists: Boolean,
+    val phone: String?,
 )
 
 val AuthUser.accessToken: String

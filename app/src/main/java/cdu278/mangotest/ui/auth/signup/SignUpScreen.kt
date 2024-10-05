@@ -47,6 +47,15 @@ fun SignUpScreen(
         val model by viewModel.modelFlow.collectAsState()
 
         OutlinedTextField(
+            value = model.phone,
+            onValueChange = { },
+            label = { Text(stringResource(R.string.signUp_phone)) },
+            readOnly = true,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+
+        OutlinedTextField(
             value = model.name,
             onValueChange = viewModel::inputName,
             label = { Text(stringResource(R.string.signUp_name)) },

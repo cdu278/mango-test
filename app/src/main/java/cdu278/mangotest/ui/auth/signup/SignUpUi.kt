@@ -3,6 +3,7 @@ package cdu278.mangotest.ui.auth.signup
 import cdu278.mangotest.ui.error.request.RequestErrorDialogUi
 
 data class SignUpUi(
+    val phone: String = "",
     val name: String = "",
     val username: String = "",
     val error: Error? = null,

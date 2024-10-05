@@ -1,11 +1,10 @@
 package cdu278.mangotest.http.client
 
 import androidx.datastore.core.DataStore
-import cdu278.mangotest.auth.tokens.AuthUserStore
+import cdu278.mangotest.auth.state.AuthStateStore
 import cdu278.mangotest.auth.refresh.RefreshAuthService
-import cdu278.mangotest.auth.tokens.AuthUser
-import cdu278.mangotest.auth.tokens.accessToken
-import cdu278.mangotest.auth.tokens.refreshToken
+import cdu278.mangotest.auth.state.AuthState
+import cdu278.mangotest.datastore.value
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +21,6 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -64,8 +62,8 @@ class HttpClientModule {
     @Singleton
     @MainHttpClient
     fun provideHttpClient(
-        @AuthUserStore
-        authUserStore: DataStore<AuthUser?>,
+        @AuthStateStore
+        authStateStore: DataStore<AuthState>,
         refreshAuthService: RefreshAuthService,
         json: Json,
     ): HttpClient {
@@ -74,13 +72,18 @@ class HttpClientModule {
             install(Auth) {
                 bearer {
                     loadTokens {
-                        authUserStore.data
-                            .first()
-                            ?.let { BearerTokens(it.accessToken, it.refreshToken) }
+                        authStateStore.value()
+                            .let { it as? AuthState.Authorized }?.tokens
+                            ?.let {
+                                BearerTokens(
+                                    accessToken = it.access,
+                                    refreshToken = it.refresh
+                                )
+                            }
                     }
                     refreshTokens {
                         refreshAuthService.refresh(oldTokens?.refreshToken!!)
-                            ?.let { BearerTokens(it.accessToken, it.refreshToken) }
+                            ?.let { BearerTokens(it.access, it.refresh) }
                     }
                 }
             }

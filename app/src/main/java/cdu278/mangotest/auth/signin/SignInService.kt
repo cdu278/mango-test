@@ -1,9 +1,9 @@
 package cdu278.mangotest.auth.signin
 
 import androidx.datastore.core.DataStore
-import cdu278.mangotest.auth.tokens.AuthTokens
-import cdu278.mangotest.auth.tokens.AuthUser
-import cdu278.mangotest.auth.tokens.AuthUserStore
+import cdu278.mangotest.auth.state.AuthState
+import cdu278.mangotest.auth.state.AuthTokens
+import cdu278.mangotest.auth.state.AuthStateStore
 import cdu278.mangotest.http.ExecuteHttpStatement
 import cdu278.mangotest.http.HttpError
 import cdu278.mangotest.http.ValidatedRequestError
@@ -24,8 +24,8 @@ import javax.inject.Inject
 class SignInService @Inject constructor(
     @AuthHttpClient
     private val httpClient: HttpClient,
-    @AuthUserStore
-    private val authUserStore: DataStore<AuthUser?>,
+    @AuthStateStore
+    private val authStateStore: DataStore<AuthState>,
 ) {
 
     fun sendAuthCode(phone: String): Op<*, ValidatedRequestError> {
@@ -49,12 +49,10 @@ class SignInService @Inject constructor(
         }.map(
             transform = {
                 val response = it.body<CheckResponse>()
-                authUserStore.updateData {
-                    AuthUser(
-                        response.tokens,
-                        response.userExists,
-                        phone = phone.takeUnless { response.userExists },
-                    )
+                authStateStore.updateData {
+                    response.tokens
+                        ?.let(AuthState::Authorized)
+                        ?: AuthState.SignUpRequired(phone)
                 }
                 response.userExists
             },

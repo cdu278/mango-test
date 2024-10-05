@@ -1,4 +1,4 @@
-package cdu278.mangotest.auth.tokens
+package cdu278.mangotest.auth.state
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class AuthTokens(
     @SerialName("access_token")
-    val accessToken: String,
+    val access: String,
     @SerialName("refresh_token")
-    val refreshToken: String,
+    val refresh: String,
 )

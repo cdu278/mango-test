@@ -1,6 +1,6 @@
 package cdu278.mangotest.auth.refresh
 
-import cdu278.mangotest.auth.tokens.AuthTokens
+import cdu278.mangotest.auth.state.AuthTokens
 import cdu278.mangotest.http.ExecuteHttpStatement
 import cdu278.mangotest.http.client.AuthHttpClient
 import cdu278.mangotest.op.resultOrNull

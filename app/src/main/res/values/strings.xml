@@ -22,4 +22,6 @@
     <string name="signUp_name_placeholder">Иван Петров</string>
     <string name="signUp_username_placeholder">A–Z a–z 0-9 -_</string>
     <string name="signUp_phone">Ваш телефон</string>
+    <string name="main_tab_chats">Чаты</string>
+    <string name="main_tab_profile">Профиль</string>
 </resources>

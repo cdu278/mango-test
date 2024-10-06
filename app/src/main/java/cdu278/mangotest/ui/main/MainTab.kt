@@ -18,7 +18,7 @@ val MainTabs: List<MainTab> =
             icon = R.drawable.ic_chat,
         ),
         MainTab(
-            title = R.string.main_tab_profile,
+            title = R.string.main_profile,
             route = MainDestinations.Profile,
             icon = R.drawable.ic_profile,
         ),

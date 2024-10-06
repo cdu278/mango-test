@@ -9,12 +9,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.createGraph
+import cdu278.mangotest.image.ImagePicker
 import cdu278.mangotest.ui.auth.signin.SignInScreen
 import cdu278.mangotest.ui.auth.signup.SignUpScreen
 import cdu278.mangotest.ui.main.MainScreen
 
 @Composable
 fun Root(
+    imagePicker: ImagePicker,
     modifier: Modifier = Modifier
 ) {
     val navController = rememberNavController()
@@ -30,6 +32,7 @@ fun Root(
                                 popUpTo(Destinations.Main) { inclusive = true }
                             }
                         },
+                        imagePicker,
                     )
                 }
                 navigation<Destinations.Auth>(startDestination = Destinations.Auth.SignIn) {

@@ -21,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import cdu278.mangotest.image.ImagePicker
 import cdu278.mangotest.ui.main.chats.ChatsScreen
 import cdu278.mangotest.ui.main.profile.ProfileScreen
 
@@ -28,6 +29,7 @@ import cdu278.mangotest.ui.main.profile.ProfileScreen
 fun MainScreen(
     viewModel: MainViewModel,
     goToAuth: () -> Unit,
+    imagePicker: ImagePicker,
     modifier: Modifier = Modifier
 ) {
     LaunchedEffect(null) {
@@ -79,6 +81,7 @@ fun MainScreen(
             composable<MainDestinations.Profile> {
                 ProfileScreen(
                     viewModel = hiltViewModel(),
+                    imagePicker,
                 )
             }
         }

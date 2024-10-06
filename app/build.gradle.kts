@@ -85,4 +85,8 @@ dependencies {
     implementation(libs.ktor.logging)
 
     implementation(libs.slf4j)
+
+    implementation(libs.kotlinx.datetime)
+
+    implementation(libs.glide.compose)
 }

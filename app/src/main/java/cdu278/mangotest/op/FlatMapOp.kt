@@ -31,6 +31,15 @@ fun <A, B, ErrorA, ErrorB> Op<A, ErrorA>.map(
     )
 }
 
+fun <A, B, Error> Op<A, Error>.map(
+    transform: suspend (A) -> B
+): Op<B, Error> {
+    return map(
+        transform,
+        transformError = { it }
+    )
+}
+
 fun <T, ErrorA, ErrorB> Op<T, ErrorA>.mapError(
     transform: suspend (ErrorA) -> ErrorB,
 ): Op<T, ErrorB> {

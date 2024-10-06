@@ -33,19 +33,28 @@ annotation class MainHttpClient
 @Retention(AnnotationRetention.BINARY)
 annotation class AuthHttpClient
 
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class Hostname
+
 @Module
 @InstallIn(SingletonComponent::class)
 class HttpClientModule {
 
+    @Provides
+    @Hostname
+    fun provideHostname(): String = "plannerok.ru"
+
     private fun HttpClientConfig<CIOEngineConfig>.basicConfig(json: Json) {
         defaultRequest {
-            url("https://plannerok.ru/api/v1/users/")
+            val hostname = provideHostname()
+            url("https://$hostname/api/v1/users/")
         }
         install(ContentNegotiation) {
             json(json)
         }
         install(Logging) {
-            level = LogLevel.BODY
+            level = LogLevel.ALL
         }
     }
 

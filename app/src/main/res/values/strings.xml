@@ -48,4 +48,6 @@
     <string name="chats_myMessageFmt">You: %s</string>
     <string name="timeFmt">%02d:%02d</string>
     <string name="chats_time_notTodayFmt">%s %s</string>
+    <string name="chat_messageField_placeholder">Message</string>
+    <string name="chat_noMessages">There are no messages here yet</string>
 </resources>

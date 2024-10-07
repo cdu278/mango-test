@@ -1,22 +1,19 @@
 package cdu278.mangotest.ui.main.profile
 
 import android.net.Uri
-import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cdu278.mangotest.auth.state.AuthState
-import cdu278.mangotest.auth.state.AuthStateStore
-import cdu278.mangotest.cache.UserCache
 import cdu278.mangotest.http.HttpError
 import cdu278.mangotest.image.ImageBase64Converter
 import cdu278.mangotest.op.error.asDialogs
 import cdu278.mangotest.op.error.collectingErrors
 import cdu278.mangotest.op.loadingAware
-import cdu278.mangotest.profile.avatar.AvatarUrlFactory
 import cdu278.mangotest.profile.OfflineFirstProfile.SyncStatus.Failed
 import cdu278.mangotest.profile.OfflineFirstProfile.SyncStatus.Synchronizing
 import cdu278.mangotest.profile.ProfileRepository
 import cdu278.mangotest.profile.UpdatedProfile
+import cdu278.mangotest.profile.avatar.AvatarUrlFactory
+import cdu278.mangotest.session.UserSession
 import cdu278.mangotest.ui.error.request.RequestErrorDialogUi
 import cdu278.mangotest.ui.main.profile.avatar.AvatarUi
 import cdu278.mangotest.ui.main.profile.dialog.ProfileDialogUi
@@ -39,10 +36,8 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val repository: ProfileRepository,
     private val avatarUrlFactory: AvatarUrlFactory,
-    @AuthStateStore
-    private val authStateStore: DataStore<AuthState>,
-    private val userCache: UserCache,
     private val imageBase64Converter: ImageBase64Converter,
+    private val userSession: UserSession,
 ) : ViewModel() {
 
     private val inputFlow = MutableStateFlow(ProfileInput())
@@ -177,8 +172,7 @@ class ProfileViewModel @Inject constructor(
 
     fun confirmLogOut() {
         viewModelScope.launch {
-            userCache.clear()
-            authStateStore.updateData { AuthState.NotAuthorized }
+            userSession.terminate()
         }
     }
 

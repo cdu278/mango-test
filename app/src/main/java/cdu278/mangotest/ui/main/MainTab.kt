@@ -13,7 +13,7 @@ data class MainTab(
 val MainTabs: List<MainTab> =
     listOf(
         MainTab(
-            title = R.string.main_tab_chats,
+            title = R.string.main_chats,
             route = MainDestinations.Chats,
             icon = R.drawable.ic_chat,
         ),

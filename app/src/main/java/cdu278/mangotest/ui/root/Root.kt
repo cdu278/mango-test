@@ -13,6 +13,7 @@ import cdu278.mangotest.image.ImagePicker
 import cdu278.mangotest.ui.auth.signin.SignInScreen
 import cdu278.mangotest.ui.auth.signup.SignUpScreen
 import cdu278.mangotest.ui.main.MainScreen
+import cdu278.mangotest.ui.main.chats.chat.ChatScreen
 
 @Composable
 fun Root(
@@ -32,7 +33,16 @@ fun Root(
                                 popUpTo(Destinations.Main) { inclusive = true }
                             }
                         },
+                        goToChat = { id ->
+                            navController.navigate(Destinations.Chat(id))
+                        },
                         imagePicker,
+                    )
+                }
+                composable<Destinations.Chat> {
+                    ChatScreen(
+                        viewModel = hiltViewModel(),
+                        goBack = navController::navigateUp,
                     )
                 }
                 navigation<Destinations.Auth>(startDestination = Destinations.Auth.SignIn) {

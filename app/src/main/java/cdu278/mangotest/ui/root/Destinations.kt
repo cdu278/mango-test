@@ -16,4 +16,7 @@ interface Destinations {
 
     @Serializable
     data object Main
+
+    @Serializable
+    class Chat(val id: Int)
 }

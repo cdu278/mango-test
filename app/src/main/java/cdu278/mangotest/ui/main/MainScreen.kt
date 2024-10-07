@@ -29,6 +29,7 @@ import cdu278.mangotest.ui.main.profile.ProfileScreen
 fun MainScreen(
     viewModel: MainViewModel,
     goToAuth: () -> Unit,
+    goToChat: (id: Int) -> Unit,
     imagePicker: ImagePicker,
     modifier: Modifier = Modifier
 ) {
@@ -76,6 +77,7 @@ fun MainScreen(
             composable<MainDestinations.Chats> {
                 ChatsScreen(
                     viewModel = hiltViewModel(),
+                    goToChat,
                 )
             }
             composable<MainDestinations.Profile> {

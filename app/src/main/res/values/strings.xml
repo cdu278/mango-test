@@ -22,7 +22,7 @@
     <string name="signUp_name_placeholder">Иван Петров</string>
     <string name="signUp_username_placeholder">A–Z a–z 0-9 -_</string>
     <string name="signUp_phone">Ваш телефон</string>
-    <string name="main_tab_chats">Чаты</string>
+    <string name="main_chats">Chats</string>
     <string name="main_profile">Profile</string>
     <string name="profile_save">Save</string>
     <string name="profile_username">Username</string>
@@ -44,4 +44,8 @@
     <string name="countryCodePicker_nothingFound">Nothing found</string>
     <string name="countryCodePicker_close">Close</string>
     <string name="countryCodePicker_countryNameFmt">%s (%s)</string>
+    <string name="chats_noChats">You have no chats yet</string>
+    <string name="chats_myMessageFmt">You: %s</string>
+    <string name="timeFmt">%02d:%02d</string>
+    <string name="chats_time_notTodayFmt">%s %s</string>
 </resources>

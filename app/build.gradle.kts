@@ -89,4 +89,8 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     implementation(libs.glide.compose)
+
+    implementation(libs.libphonenumber)
+
+    implementation(libs.flagkit)
 }

@@ -16,6 +16,8 @@ ktor = "2.3.12"
 slf4j = "1.7.36"
 datetime = "0.6.1"
 glide = "1.0.0-beta01"
+libphonenumber = "8.13.47"
+flagkit = "1.0.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,6 +46,8 @@ ktor-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = 
 slf4j = { group = "org.slf4j", name = "slf4j-android", version.ref = "slf4j" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 glide-compose = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide" }
+libphonenumber = { group = "com.googlecode.libphonenumber", name = "libphonenumber", version.ref = "libphonenumber" }
+flagkit = { group = "com.github.murgupluoglu", name = "flagkit-android", version.ref = "flagkit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

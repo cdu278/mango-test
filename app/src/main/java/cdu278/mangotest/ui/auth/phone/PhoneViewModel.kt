@@ -12,12 +12,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class PhoneViewModel(
@@ -63,20 +64,20 @@ class PhoneViewModel(
                 formatter = country?.formatter,
                 countryPicker = countryViewModel?.let(PhoneUi::CountryPicker),
             )
-        }.flowOn(Dispatchers.Default)
-            .stateIn(coroutineScope, uiSharingStarted, initialValue = PhoneUi())
+        }.stateIn(coroutineScope, uiSharingStarted, initialValue = PhoneUi())
 
     private suspend fun currentCountry(
         pickedCountry: PhoneCountry?,
         phone: String,
     ): PhoneCountry? {
-        return pickedCountry
-            ?: countries().filter { phone.startsWith("+${it.phoneCode}") }
+        return pickedCountry ?: withContext(Dispatchers.Default) {
+            countries().filter { phone.startsWith("+${it.phoneCode}") }
                 .takeIf { it.isNotEmpty() }
                 ?.let { countries ->
                     countries.find { it.code == defaultCountryCode }
                         ?: countries.first()
                 }
+        }
     }
 
     private fun String.withLeadingPlus(): String {
@@ -101,18 +102,41 @@ class PhoneViewModel(
                 c.takeIf { (it == '+' && index == 0) || c.isDigit() }
             }.toCharArray().let(::String)
         _phoneFlow.value = cleanedPhone
+
+        pickedCountryFlow.value?.let { pickedCountry ->
+            if (!cleanedPhone.withLeadingPlus().startsWith("+${pickedCountry.phoneCode}")) {
+                pickedCountryFlow.value = null
+            }
+        }
     }
 
-    fun chooseCountry() {
+    fun pickCountry() {
         coroutineScope.launch {
             countryViewModelFlow.value =
                 PhoneCountryViewModel(
                     coroutineScope,
                     countries(),
-                    onCountryPicked = { },
+                    onCountryPicked = ::onCountryPicked,
                     dismiss = { countryViewModelFlow.value = null },
                 )
         }
+    }
+
+    private fun onCountryPicked(country: PhoneCountry) {
+        coroutineScope.launch {
+            currentCountry(pickedCountryFlow.value, phoneFlow.value)
+                ?.let { currentCountry ->
+                    _phoneFlow.update {
+                        it.replaceFirst(currentCountry.phoneCode, country.phoneCode)
+                    }
+                }
+                ?: _phoneFlow.update { "+${country.phoneCode}${it.withoutLeadingPlus()}" }
+            pickedCountryFlow.value = country
+        }
+    }
+
+    private fun String.withoutLeadingPlus(): String {
+        return this.takeUnless { it.startsWith('+') } ?: this.drop(1)
     }
 
     class Factory @Inject constructor(

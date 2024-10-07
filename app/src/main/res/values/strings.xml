@@ -39,4 +39,9 @@
     <string name="logoutDialog_title">Log out</string>
     <string name="logoutDialog_text">Are you sure you want to log out?</string>
     <string name="profile_error_emptyName">Please enter name</string>
+    <string name="countryCodePicker_title">Select country</string>
+    <string name="countryCodePicker_search">Search</string>
+    <string name="countryCodePicker_nothingFound">Nothing found</string>
+    <string name="countryCodePicker_close">Close</string>
+    <string name="countryCodePicker_countryNameFmt">%s (%s)</string>
 </resources>

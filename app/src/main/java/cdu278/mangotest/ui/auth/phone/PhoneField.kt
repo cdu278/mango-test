@@ -47,7 +47,7 @@ fun PhoneField(
         singleLine = true,
         label = { Text(stringResource(R.string.signIn_phoneNumber)) },
         leadingIcon = {
-            IconButton(onClick = viewModel::chooseCountry) {
+            IconButton(onClick = viewModel::pickCountry) {
                 model.flagResId
                     ?.let { Image(painterResource(it), contentDescription = null) }
                     ?: Icon(painterResource(R.drawable.ic_globe), contentDescription = null)

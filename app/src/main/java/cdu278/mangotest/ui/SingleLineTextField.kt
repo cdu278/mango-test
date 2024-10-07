@@ -17,8 +17,8 @@ import cdu278.mangotest.R
 fun SingleLineTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    label: @Composable () -> Unit,
     modifier: Modifier = Modifier,
+    label: (@Composable () -> Unit)? = null,
     placeholder: (@Composable () -> Unit)? = null,
     readOnly: Boolean = false,
     enabled: Boolean = true,

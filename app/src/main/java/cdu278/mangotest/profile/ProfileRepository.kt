@@ -4,8 +4,8 @@ import cdu278.mangotest.http.ValidatedRequestError
 import cdu278.mangotest.op.Op
 import cdu278.mangotest.op.fold
 import cdu278.mangotest.op.map
-import cdu278.mangotest.profile.OfflineFirstProfile.SyncStatus
-import cdu278.mangotest.profile.datasource.local.LocalProfile
+import cdu278.mangotest.profile.datasource.local.LocalProfile.Absent
+import cdu278.mangotest.profile.datasource.local.LocalProfile.Present
 import cdu278.mangotest.profile.datasource.local.LocalProfileDataSource
 import cdu278.mangotest.profile.datasource.local.current
 import cdu278.mangotest.profile.datasource.remote.RemoteProfileDataSource
@@ -23,31 +23,25 @@ class ProfileRepository @Inject constructor(
 
     private val refreshSignalFlow = MutableStateFlow(System.currentTimeMillis())
 
-    val flow: Flow<OfflineFirstProfile>
+    val flow: Flow<OfflineBasedProfile>
         get() = channelFlow {
             var updating: Job? = null
             refreshSignalFlow.collect {
                 updating?.cancel()
-
-                val localProfile = (localDataSource.current() as? LocalProfile.Present)?.profile
-                send(OfflineFirstProfile(localProfile, SyncStatus.Synchronizing))
-
                 updating = launch {
-                    remoteDataSource.get()
-                        .fold(
-                            ifSuccess = { remoteProfile ->
-                                localDataSource.set(remoteProfile)
-                                localDataSource.flow.collect collectLocal@ {
-                                    val profile =
-                                        (it as? LocalProfile.Present)?.profile
-                                            ?: return@collectLocal
-                                    send(OfflineFirstProfile(profile, SyncStatus.Synchronized))
-                                }
-                            },
+                    if (localDataSource.current() is Absent) {
+                        send(OfflineBasedProfile.Syncing)
+                        remoteDataSource.get().fold(
+                            ifSuccess = { localDataSource.set(it) },
                             ifFailure = { error ->
-                                send(OfflineFirstProfile(localProfile, SyncStatus.Failed(error)))
+                                send(OfflineBasedProfile.FailedToSync(error))
                             }
                         )
+                    }
+                    localDataSource.flow.collect { local ->
+                        (local as? Present)?.profile
+                            ?.let { send(OfflineBasedProfile.Synced(it)) }
+                    }
                 }
             }
         }

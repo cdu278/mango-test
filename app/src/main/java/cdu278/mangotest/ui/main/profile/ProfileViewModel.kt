@@ -8,8 +8,9 @@ import cdu278.mangotest.image.ImageBase64Converter
 import cdu278.mangotest.op.error.asDialogs
 import cdu278.mangotest.op.error.collectingErrors
 import cdu278.mangotest.op.loadingAware
-import cdu278.mangotest.profile.OfflineFirstProfile.SyncStatus.Failed
-import cdu278.mangotest.profile.OfflineFirstProfile.SyncStatus.Synchronizing
+import cdu278.mangotest.profile.OfflineBasedProfile.FailedToSync
+import cdu278.mangotest.profile.OfflineBasedProfile.Synced
+import cdu278.mangotest.profile.OfflineBasedProfile.Syncing
 import cdu278.mangotest.profile.ProfileRepository
 import cdu278.mangotest.profile.UpdatedProfile
 import cdu278.mangotest.profile.avatar.AvatarUrlFactory
@@ -60,9 +61,9 @@ class ProfileViewModel @Inject constructor(
             inputFlow,
             profileFlow,
             loadingFlow,
-        ) { input, model, loading ->
+        ) { input, offlineBasedProfile, loading ->
             ProfileUi(
-                data = model.profile?.let { profile ->
+                data = (offlineBasedProfile as? Synced)?.profile?.let { profile ->
                     val error = input.validate()
                     ProfileUi.Data(
                         avatar = input.avatarUri?.let { AvatarUi.Local(it) }
@@ -78,8 +79,8 @@ class ProfileViewModel @Inject constructor(
                         error = error,
                     )
                 },
-                loading = loading || model.syncStatus is Synchronizing,
-                syncFailure = (model.syncStatus as? Failed)?.error?.asSyncFailure(),
+                loading = loading || offlineBasedProfile is Syncing,
+                syncFailure = (offlineBasedProfile as? FailedToSync)?.error?.asSyncFailure(),
             )
         }.stateIn(viewModelScope, uiSharingStarted, initialValue = null)
 
@@ -132,7 +133,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     private suspend fun ProfileInput.asUpdatedProfile(): UpdatedProfile {
-        val profile = profileFlow.first().profile!!
+        val profile = (profileFlow.first() as Synced).profile
         return UpdatedProfile(
             username = profile.username,
             name = this.name?.trim() ?: profile.name,

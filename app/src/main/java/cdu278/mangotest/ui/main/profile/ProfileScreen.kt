@@ -1,5 +1,6 @@
 package cdu278.mangotest.ui.main.profile
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +20,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.pullToRefresh
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -96,17 +99,22 @@ fun ProfileScreen(
             },
         )
 
-        if (model.syncFailure != null) {
-            SyncFailureCard(model.syncFailure)
-            Spacer(Modifier.height(defaultMargin))
-        }
-
-        PullToRefreshBox(
-            isRefreshing = model.loading,
-            onRefresh = viewModel::refresh,
+        val pullRefreshState = rememberPullToRefreshState()
+        Box(
             modifier = Modifier
                 .weight(1f)
+                .pullToRefresh(
+                    state = pullRefreshState,
+                    isRefreshing = model.loading,
+                    onRefresh = viewModel::refresh,
+                    enabled = model.syncFailure != null,
+                )
         ) {
+            if (model.syncFailure != null) {
+                SyncFailureCard(model.syncFailure)
+                Spacer(Modifier.height(defaultMargin))
+            }
+
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 contentPadding = PaddingValues(halfMargin),
@@ -218,26 +226,35 @@ fun ProfileScreen(
                     )
                 }
             }
+
+            PullToRefreshDefaults.Indicator(
+                state = pullRefreshState,
+                isRefreshing = model.loading,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+            )
         }
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = when (model.data?.error) {
-                    ProfileErrorUi.EmptyName -> stringResource(R.string.profile_error_emptyName)
-                    null -> ""
-                },
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.error,
-            )
-            Button(
-                onClick = viewModel::save,
-                enabled = canSave && !model.loading,
-                modifier = Modifier
-                    .fillMaxWidth()
+        if (model.data != null) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(stringResource(R.string.profile_save))
+                Text(
+                    text = when (model.data.error) {
+                        ProfileErrorUi.EmptyName -> stringResource(R.string.profile_error_emptyName)
+                        null -> ""
+                    },
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.error,
+                )
+                Button(
+                    onClick = viewModel::save,
+                    enabled = canSave && !model.loading,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(stringResource(R.string.profile_save))
+                }
             }
         }
     }

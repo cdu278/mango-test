@@ -139,13 +139,13 @@ class ProfileViewModel @Inject constructor(
             city = if (this.city != null) {
                 this.city.takeIf { it.isNotBlank() }?.trim()
             } else {
-                null
+                profile.city
             },
             birthday = this.birthday ?: profile.birthday,
             status = if (this.status != null) {
                 this.status.takeIf { it.isNotBlank() }?.trim()
             } else {
-                null
+                profile.status
             },
             avatar = this.avatarUri?.let { uri ->
                 UpdatedProfile.Avatar(

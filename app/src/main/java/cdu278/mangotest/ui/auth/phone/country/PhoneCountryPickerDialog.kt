@@ -45,7 +45,7 @@ fun PhoneCountryPickerDialog(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .padding(halfMargin)
+                    .padding(defaultMargin)
             ) {
                 Text(
                     stringResource(R.string.countryCodePicker_title),

@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -59,7 +58,7 @@ class SignUpViewModel @Inject constructor(
                 error = when {
                     input.name.isBlank() -> SignUpUi.Error.EmptyName
                     input.username.isBlank() -> SignUpUi.Error.EmptyUsername
-                    input.username.any { !it.isAllowedUsernameChar() } ->
+                    input.username.trim().any { !it.isAllowedUsernameChar() } ->
                         SignUpUi.Error.InvalidUsername
                     else -> null
                 },

@@ -7,9 +7,10 @@ import cdu278.mangotest.auth.signup.SignUpService
 import cdu278.mangotest.auth.state.AuthState
 import cdu278.mangotest.auth.state.AuthStateStore
 import cdu278.mangotest.datastore.value
+import cdu278.mangotest.op.error.asDialogs
+import cdu278.mangotest.op.error.collectingErrors
 import cdu278.mangotest.op.loadingAware
 import cdu278.mangotest.ui.error.request.RequestErrorDialogUi
-import cdu278.mangotest.ui.error.request.collectingError
 import cdu278.mangotest.ui.uiSharingStarted
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -84,7 +85,7 @@ class SignUpViewModel @Inject constructor(
             val input = inputFlow.value
             signUpService.signUp(name = input.name.trim(), username = input.username.trim())
                 .loadingAware(loadingFlow)
-                .perform(collectingError(dialogFlow) {
+                .perform(collectingErrors(asDialogs(dialogFlow)) {
                     _eventFlow.emit(SignUpEvent.SignedUp)
                 })
         }

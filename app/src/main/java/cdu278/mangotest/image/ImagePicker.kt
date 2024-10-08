@@ -8,19 +8,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
-interface ImagePicker {
-
-    val uriFlow: Flow<Uri>
-
-    fun open()
-}
-
-class ActivityImagePicker(
+class ImagePicker(
     private val activity: ComponentActivity,
-) : ImagePicker {
+) {
 
     private val _uriFlow = MutableSharedFlow<Uri>()
-    override val uriFlow: Flow<Uri>
+    val uriFlow: Flow<Uri>
         get() = _uriFlow
 
     private val resultLauncher =
@@ -30,7 +23,7 @@ class ActivityImagePicker(
             }
         }
 
-    override fun open() {
+    fun open() {
         resultLauncher.launch("image/*")
     }
 }

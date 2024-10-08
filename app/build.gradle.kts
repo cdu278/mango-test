@@ -75,8 +75,6 @@ dependencies {
 
     implementation(libs.androidx.datastore)
 
-    implementation(libs.countryCodePicker)
-
     implementation(libs.ktor.core)
     implementation(libs.ktor.cio)
     implementation(libs.ktor.contentNegotiation)

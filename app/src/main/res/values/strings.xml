@@ -7,7 +7,6 @@
     <string name="signIn_smsCode">Код из СМС</string>
     <string name="signIn_code_error">Код должен состоять из 6 цифр</string>
     <string name="errorDialog_title">Ошибка</string>
-    <string name="requestErrorDialog_validation_text">Пожалуйста, проверьте правильность введенных данных</string>
     <string name="requestErrorDialog_connection_text">Произошла ошибка соединения. Повторите попытку позже</string>
     <string name="requestErrorDialog_unknown_text">Что-то пошло не так. Повторите поптыку позже</string>
     <string name="loading">Загрузка...</string>

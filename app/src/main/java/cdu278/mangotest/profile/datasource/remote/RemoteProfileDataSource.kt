@@ -2,6 +2,7 @@ package cdu278.mangotest.profile.datasource.remote
 
 import cdu278.mangotest.http.ExecuteHttpStatement
 import cdu278.mangotest.http.HttpError
+import cdu278.mangotest.http.ParseValidatedRequestErrorStrategy
 import cdu278.mangotest.http.ValidatedRequestError
 import cdu278.mangotest.http.client.MainHttpClient
 import cdu278.mangotest.op.Op
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class RemoteProfileDataSource @Inject constructor(
     @MainHttpClient
     private val httpClient: HttpClient,
+    private val parseErrorStrategy: ParseValidatedRequestErrorStrategy,
 ) {
 
     fun get(): Op<Profile, HttpError> {
@@ -47,7 +49,7 @@ class RemoteProfileDataSource @Inject constructor(
             }
         }.map(
             transform = { it.body<UpdateResponse>().avatars },
-            transformError = ValidatedRequestError.Companion::create
+            transformError = parseErrorStrategy::apply
         )
     }
 

@@ -14,13 +14,11 @@ fun RequestErrorDialog(
     onDismiss: () -> Unit,
 ) {
     ErrorDialog(
-        text = stringResource(
-            id = when (model ?: return) {
-                ValidationError -> R.string.requestErrorDialog_validation_text
-                ConnectionError -> R.string.requestErrorDialog_connection_text
-                UnknownError -> R.string.requestErrorDialog_unknown_text
-            }
-        ),
+        text = when (val m = model ?: return) {
+            is ValidationError -> m.message
+            is ConnectionError -> stringResource(R.string.requestErrorDialog_connection_text)
+            is UnknownError -> stringResource(R.string.requestErrorDialog_unknown_text)
+        },
         onDismiss = onDismiss,
     )
 }

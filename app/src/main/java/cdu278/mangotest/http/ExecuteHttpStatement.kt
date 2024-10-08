@@ -20,7 +20,7 @@ class ExecuteHttpStatement(
                 if (response.status.isSuccess()) {
                     results.success(response)
                 } else {
-                    results.failure(HttpError.Failure(httpCode = response.status.value))
+                    results.failure(HttpError.Failure(response))
                 }
             } catch (e: Exception) {
                 results.failure(HttpError.Io(e))

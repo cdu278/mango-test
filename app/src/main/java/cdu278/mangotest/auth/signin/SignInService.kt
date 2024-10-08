@@ -6,8 +6,10 @@ import cdu278.mangotest.auth.state.AuthTokens
 import cdu278.mangotest.auth.state.AuthStateStore
 import cdu278.mangotest.http.ExecuteHttpStatement
 import cdu278.mangotest.http.HttpError
+import cdu278.mangotest.http.ParseValidatedRequestErrorStrategy
 import cdu278.mangotest.http.ValidatedRequestError
 import cdu278.mangotest.http.client.AuthHttpClient
+import cdu278.mangotest.http.httpCode
 import cdu278.mangotest.op.Op
 import cdu278.mangotest.op.map
 import cdu278.mangotest.op.mapError
@@ -26,6 +28,7 @@ class SignInService @Inject constructor(
     private val httpClient: HttpClient,
     @AuthStateStore
     private val authStateStore: DataStore<AuthState>,
+    private val parseErrorStrategy: ParseValidatedRequestErrorStrategy,
 ) {
 
     fun sendAuthCode(phone: String): Op<*, ValidatedRequestError> {
@@ -34,7 +37,7 @@ class SignInService @Inject constructor(
                 setBody(hashMapOf("phone" to phone))
                 contentType(ContentType.Application.Json)
             }
-        }.mapError(ValidatedRequestError.Companion::create)
+        }.mapError(parseErrorStrategy::apply)
     }
 
     fun checkAuthCode(phone: String, code: String): Op<Boolean, CheckAuthCodeError> {
@@ -60,7 +63,7 @@ class SignInService @Inject constructor(
                 if (error is HttpError.Failure && error.httpCode == 404) {
                     CheckAuthCodeError.InvalidCode
                 } else {
-                    CheckAuthCodeError.Wrapped(ValidatedRequestError.create(error))
+                    CheckAuthCodeError.Wrapped(parseErrorStrategy.apply(error))
                 }
             }
         )

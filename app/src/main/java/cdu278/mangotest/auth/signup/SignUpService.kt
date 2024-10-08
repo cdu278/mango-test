@@ -5,6 +5,7 @@ import cdu278.mangotest.auth.state.AuthState
 import cdu278.mangotest.auth.state.AuthStateStore
 import cdu278.mangotest.datastore.value
 import cdu278.mangotest.http.ExecuteHttpStatement
+import cdu278.mangotest.http.ParseValidatedRequestErrorStrategy
 import cdu278.mangotest.http.ValidatedRequestError
 import cdu278.mangotest.http.client.AuthHttpClient
 import cdu278.mangotest.op.Op
@@ -22,6 +23,7 @@ class SignUpService @Inject constructor(
     private val httpClient: HttpClient,
     @AuthStateStore
     private val authStateStore: DataStore<AuthState>,
+    private val parseErrorStrategy: ParseValidatedRequestErrorStrategy,
 ) {
 
     fun signUp(name: String, username: String): Op<*, ValidatedRequestError> {
@@ -41,7 +43,7 @@ class SignUpService @Inject constructor(
                     AuthState.Authorized(tokens = response.body())
                 }
             },
-            transformError = { ValidatedRequestError.create(it) },
+            transformError = parseErrorStrategy::apply,
         )
     }
 }

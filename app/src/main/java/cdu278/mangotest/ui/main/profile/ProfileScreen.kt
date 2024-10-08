@@ -58,6 +58,7 @@ fun ProfileScreen(
     }
     Column(
         modifier = modifier
+            .padding(halfMargin)
     ) {
         val errorDialog by viewModel.errorDialogFlow.collectAsState()
         RequestErrorDialog(
@@ -95,6 +96,11 @@ fun ProfileScreen(
             },
         )
 
+        if (model.syncFailure != null) {
+            SyncFailureCard(model.syncFailure)
+            Spacer(Modifier.height(defaultMargin))
+        }
+
         PullToRefreshBox(
             isRefreshing = model.loading,
             onRefresh = viewModel::refresh,
@@ -107,13 +113,6 @@ fun ProfileScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                if (model.syncFailure != null) {
-                    item("syncFailure") {
-                        SyncFailureCard(model.syncFailure)
-                        Spacer(Modifier.height(defaultMargin))
-                    }
-                }
-
                 val data = model.data ?: return@LazyColumn
 
                 item("avatar") {
@@ -223,8 +222,6 @@ fun ProfileScreen(
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(halfMargin)
         ) {
             Text(
                 text = when (model.data?.error) {

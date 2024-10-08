@@ -3,7 +3,6 @@ package cdu278.mangotest.ui.auth.signin
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -11,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import cdu278.mangotest.R
+import cdu278.mangotest.ui.SingleLineTextField
 
 @Composable
 fun SmsCodeField(
@@ -21,14 +21,13 @@ fun SmsCodeField(
     enabled: Boolean,
     modifier: Modifier = Modifier
 ) {
-    OutlinedTextField(
+    SingleLineTextField(
         value,
         onValueChange,
         label = { Text(stringResource(R.string.signIn_smsCode)) },
-        singleLine = true,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Done,
+            imeAction = if (isError) ImeAction.None else ImeAction.Done,
         ),
         keyboardActions = KeyboardActions(
             onDone = { onDone() },

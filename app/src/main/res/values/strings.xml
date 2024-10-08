@@ -19,7 +19,7 @@
     <string name="signUp_error_invalidUsername">The username contains unacceptable symbols</string>
     <string name="signUp_signUp">Sign up</string>
     <string name="signUp_name_placeholder">John Smith</string>
-    <string name="signUp_username_placeholder">A–Z a–z 0-9 -_</string>
+    <string name="signUp_username_supportingText">May contain A–Z a–z 0–9 -_ symbols</string>
     <string name="signUp_phone">Your phone</string>
     <string name="main_chats">Chats</string>
     <string name="main_profile">Profile</string>
